@@ -3,20 +3,11 @@ spring:
     active: development
 ---
 spring:
-  profiles: cloud
-security:
-  oauth2:
-    resource:
-      userInfoUri: ${vcap.services.user-service.credentials.uri:http://localhost:8181}/uaa/user
-    client:
-      client-id: acme
----
-spring:
   profiles: development
   datasource:
-    url: jdbc:mysql://192.168.99.100:3306/dev
+    url: jdbc:mysql://localhost:3306/dev
     username: root
-    password: dbpass
+    password: root
     initialize: false
 security:
   oauth2:
@@ -25,18 +16,26 @@ security:
     client:
       client-id: acme
       access-token-uri: http://localhost:8787
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
 ---
 spring:
   profiles: docker
   datasource:
     url: jdbc:mysql://mysql:3306/dev
     username: root
-    password: dbpass
+    password: root
     initialize: true
 security:
   oauth2:
     resource:
-      userInfoUri: http://${DOCKER_IP:192.168.99.100}:8181/uaa/user
+      userInfoUri: http://${DOCKER_IP:localhost}:8181/uaa/user
     client:
       client-id: acme
 eureka:
